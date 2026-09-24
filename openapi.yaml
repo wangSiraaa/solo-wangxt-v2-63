@@ -1,0 +1,1498 @@
+openapi: 3.0.3
+info:
+  title: 街道环卫考核 API
+  version: 1.0.0
+  description: |-
+    道路网格、拍摄证据、问题事件、保洁合同与扣分处罚。
+
+    感知哈希仅用于生成疑似重复候选；事件关联以位置、时间及人工判断为准。
+paths:
+  /api/clock/:
+    get:
+      operationId: clock_retrieve
+      description: 'Test seam: pin / reset the clock that drives SLA escalation.'
+      tags:
+      - clock
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: clock_create
+      description: 'Test seam: pin / reset the clock that drives SLA escalation.'
+      tags:
+      - clock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClockSetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClockSetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClockSetRequest'
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/contractors/:
+    get:
+      operationId: contractors_list
+      tags:
+      - contractors
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contractor'
+          description: ''
+    post:
+      operationId: contractors_create
+      tags:
+      - contractors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+          description: ''
+  /api/contractors/{id}/:
+    get:
+      operationId: contractors_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this contractor.
+        required: true
+      tags:
+      - contractors
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+          description: ''
+    put:
+      operationId: contractors_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this contractor.
+        required: true
+      tags:
+      - contractors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContractorRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+          description: ''
+    patch:
+      operationId: contractors_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this contractor.
+        required: true
+      tags:
+      - contractors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContractorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContractorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContractorRequest'
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contractor'
+          description: ''
+    delete:
+      operationId: contractors_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this contractor.
+        required: true
+      tags:
+      - contractors
+      security:
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/contracts/:
+    get:
+      operationId: contracts_list
+      tags:
+      - contracts
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contract'
+          description: ''
+    post:
+      operationId: contracts_create
+      tags:
+      - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContractRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContractRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+  /api/contracts/{id}/:
+    get:
+      operationId: contracts_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cleaning contract.
+        required: true
+      tags:
+      - contracts
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+    put:
+      operationId: contracts_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cleaning contract.
+        required: true
+      tags:
+      - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContractRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContractRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+    patch:
+      operationId: contracts_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cleaning contract.
+        required: true
+      tags:
+      - contracts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContractRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContractRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContractRequest'
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+    delete:
+      operationId: contracts_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cleaning contract.
+        required: true
+      tags:
+      - contracts
+      security:
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/duplicate-candidates/:
+    get:
+      operationId: duplicate_candidates_list
+      tags:
+      - duplicate-candidates
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DuplicateCandidate'
+          description: ''
+  /api/duplicate-candidates/{id}/:
+    get:
+      operationId: duplicate_candidates_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this duplicate candidate.
+        required: true
+      tags:
+      - duplicate-candidates
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuplicateCandidate'
+          description: ''
+  /api/duplicate-candidates/{id}/decide/:
+    post:
+      operationId: duplicate_candidates_decide_create
+      description: |-
+        Human verdict: same_event merges; different_place keeps them apart
+        even if the photos are visually identical.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this duplicate candidate.
+        required: true
+      tags:
+      - duplicate-candidates
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DuplicateCandidate'
+          description: ''
+  /api/escalations/:
+    get:
+      operationId: escalations_retrieve
+      description: 按当前(可注入)时钟执行逾期升级扫描；幂等，可重复运行。
+      tags:
+      - escalations
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: escalations_create
+      description: 同 GET：触发一次逾期升级扫描。
+      tags:
+      - escalations
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/events/:
+    get:
+      operationId: events_list
+      tags:
+      - events
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+          description: ''
+  /api/events/{id}/:
+    get:
+      operationId: events_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this event.
+        required: true
+      tags:
+      - events
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+  /api/events/{id}/penalty-units/:
+    get:
+      operationId: events_penalty_units_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this event.
+        required: true
+      tags:
+      - events
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+  /api/events/{id}/rectifications/:
+    get:
+      operationId: events_rectifications_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this event.
+        required: true
+      tags:
+      - events
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+  /api/events/{id}/rectify/:
+    post:
+      operationId: events_rectify_create
+      description: |-
+        Record a rectification callback. Callbacks are append-only; only
+        the first closes the event, repeated callbacks stay effective=false.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this event.
+        required: true
+      tags:
+      - events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EventRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+          description: ''
+  /api/grids/:
+    get:
+      operationId: grids_list
+      tags:
+      - grids
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoadGrid'
+          description: ''
+    post:
+      operationId: grids_create
+      tags:
+      - grids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoadGridRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RoadGridRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RoadGridRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoadGrid'
+          description: ''
+  /api/grids/{id}/:
+    get:
+      operationId: grids_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this road grid.
+        required: true
+      tags:
+      - grids
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoadGrid'
+          description: ''
+    put:
+      operationId: grids_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this road grid.
+        required: true
+      tags:
+      - grids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoadGridRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RoadGridRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RoadGridRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoadGrid'
+          description: ''
+    patch:
+      operationId: grids_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this road grid.
+        required: true
+      tags:
+      - grids
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRoadGridRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRoadGridRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRoadGridRequest'
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoadGrid'
+          description: ''
+    delete:
+      operationId: grids_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this road grid.
+        required: true
+      tags:
+      - grids
+      security:
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/penalty-units/:
+    get:
+      operationId: penalty_units_list
+      tags:
+      - penalty-units
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PenaltyUnit'
+          description: ''
+  /api/penalty-units/{id}/:
+    get:
+      operationId: penalty_units_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this penalty unit.
+        required: true
+      tags:
+      - penalty-units
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PenaltyUnit'
+          description: ''
+  /api/penalty-units/{id}/corrections/:
+    post:
+      operationId: penalty_units_corrections_create
+      description: |-
+        Append a correction. The unit itself is never rewritten even after
+        locking; the corrected total = original + sum(corrections).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this penalty unit.
+        required: true
+      tags:
+      - penalty-units
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PenaltyUnit'
+          description: ''
+  /api/penalty-units/{id}/review/:
+    post:
+      operationId: penalty_units_review_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this penalty unit.
+        required: true
+      tags:
+      - penalty-units
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PenaltyUnit'
+          description: ''
+  /api/photos/:
+    get:
+      operationId: photos_list
+      tags:
+      - photos
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Photo'
+          description: ''
+    post:
+      operationId: photos_create
+      tags:
+      - photos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoUploadRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PhotoUploadRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PhotoUploadRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+          description: ''
+  /api/photos/{id}/:
+    get:
+      operationId: photos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this photo.
+        required: true
+      tags:
+      - photos
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+          description: ''
+components:
+  schemas:
+    ClockSetRequest:
+      type: object
+      properties:
+        now:
+          type: string
+          format: date-time
+        reset:
+          type: boolean
+          default: false
+    Contract:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        contractor:
+          type: integer
+        contractor_name:
+          type: string
+          readOnly: true
+        grid:
+          type: integer
+        grid_code:
+          type: string
+          readOnly: true
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - contractor
+      - contractor_name
+      - created_at
+      - grid
+      - grid_code
+      - id
+      - valid_from
+    ContractRequest:
+      type: object
+      properties:
+        contractor:
+          type: integer
+        grid:
+          type: integer
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - contractor
+      - grid
+      - valid_from
+    Contractor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+    ContractorRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+      required:
+      - name
+    DecisionEnum:
+      enum:
+      - pending
+      - same_event
+      - different_place
+      type: string
+      description: |-
+        * `pending` - 待人工判定
+        * `same_event` - 确认同一事件(不同角度)
+        * `different_place` - 相似但不同地点
+    DuplicateCandidate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        photo:
+          allOf:
+          - $ref: '#/components/schemas/Photo'
+          readOnly: true
+        similar_photo:
+          allOf:
+          - $ref: '#/components/schemas/Photo'
+          readOnly: true
+        hamming_distance:
+          type: integer
+          readOnly: true
+        distance_meters:
+          type: number
+          format: double
+          readOnly: true
+        time_gap_seconds:
+          type: number
+          format: double
+          readOnly: true
+        within_spatial_window:
+          type: boolean
+          readOnly: true
+        within_temporal_window:
+          type: boolean
+          readOnly: true
+        same_spot_repeat:
+          type: boolean
+          readOnly: true
+        decision:
+          allOf:
+          - $ref: '#/components/schemas/DecisionEnum'
+          readOnly: true
+        decision_display:
+          type: string
+          readOnly: true
+        decided_by:
+          type: string
+          readOnly: true
+        decided_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - decided_at
+      - decided_by
+      - decision
+      - decision_display
+      - distance_meters
+      - hamming_distance
+      - id
+      - photo
+      - same_spot_repeat
+      - similar_photo
+      - time_gap_seconds
+      - within_spatial_window
+      - within_temporal_window
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: string
+          maxLength: 64
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - Point
+            coordinates:
+              type: array
+              description: GeoJSON 坐标，SRID 4326
+          required:
+          - type
+          - coordinates
+          readOnly: true
+        grid:
+          type: integer
+        grid_code:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/EventStatusEnum'
+        status_display:
+          type: string
+          readOnly: true
+        opened_at:
+          type: string
+          format: date-time
+        rectified_at:
+          type: string
+          format: date-time
+          nullable: true
+        merged_into:
+          type: integer
+          readOnly: true
+        photo_ids:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - category
+      - grid
+      - grid_code
+      - id
+      - location
+      - merged_into
+      - opened_at
+      - photo_ids
+      - status_display
+    EventRequest:
+      type: object
+      properties:
+        category:
+          type: string
+          minLength: 1
+          maxLength: 64
+        grid:
+          type: integer
+        status:
+          $ref: '#/components/schemas/EventStatusEnum'
+        opened_at:
+          type: string
+          format: date-time
+        rectified_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - category
+      - grid
+      - opened_at
+    EventStatusEnum:
+      enum:
+      - open
+      - rectified
+      type: string
+      description: |-
+        * `open` - 待整改
+        * `rectified` - 已整改
+    KindEnum:
+      enum:
+      - problem
+      - rectify
+      type: string
+      description: |-
+        * `problem` - 问题照片
+        * `rectify` - 整改照片
+    LevelEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      type: integer
+      description: |-
+        * `0` - 基础扣分
+        * `1` - 逾期一级(24h)
+        * `2` - 逾期二级(48h)
+        * `3` - 逾期三级(72h)
+    PatchedContractRequest:
+      type: object
+      properties:
+        contractor:
+          type: integer
+        grid:
+          type: integer
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+          nullable: true
+    PatchedContractorRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+    PatchedRoadGridRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 64
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        area:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - Polygon
+            coordinates:
+              type: array
+              description: GeoJSON 坐标，SRID 4326
+          required:
+          - type
+          - coordinates
+    PenaltyCorrection:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        unit:
+          type: integer
+          readOnly: true
+        delta_points:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          description: 正数追加扣分，负数退还/撤销扣分，最终扣分=原值+所有更正之和
+        reason:
+          type: string
+          maxLength: 500
+        created_by:
+          type: string
+          maxLength: 100
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - delta_points
+      - id
+      - reason
+      - unit
+    PenaltyCorrectionRequest:
+      type: object
+      properties:
+        delta_points:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          description: 正数追加扣分，负数退还/撤销扣分，最终扣分=原值+所有更正之和
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 500
+        created_by:
+          type: string
+          minLength: 1
+          maxLength: 100
+      required:
+      - created_by
+      - delta_points
+      - reason
+    PenaltyUnit:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        event:
+          type: integer
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelEnum'
+          readOnly: true
+        level_display:
+          type: string
+          readOnly: true
+        reason:
+          type: string
+          readOnly: true
+        base_points:
+          type: integer
+          readOnly: true
+        escalation_points:
+          type: integer
+          readOnly: true
+        total_points:
+          type: integer
+          readOnly: true
+        rule_version:
+          type: string
+          readOnly: true
+        liable_contract:
+          type: integer
+          readOnly: true
+          nullable: true
+        contractor:
+          type: integer
+          readOnly: true
+          nullable: true
+        contractor_locked:
+          type: boolean
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PenaltyUnitStatusEnum'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        issued_at:
+          type: string
+          format: date-time
+          readOnly: true
+        reviewed_by:
+          type: string
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        corrections:
+          type: array
+          items:
+            $ref: '#/components/schemas/PenaltyCorrection'
+          readOnly: true
+        corrected_points:
+          type: integer
+          readOnly: true
+        evidence_photo_ids:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        event_merged_void:
+          type: boolean
+          readOnly: true
+      required:
+      - base_points
+      - contractor
+      - contractor_locked
+      - corrected_points
+      - corrections
+      - escalation_points
+      - event
+      - event_merged_void
+      - evidence_photo_ids
+      - id
+      - issued_at
+      - level
+      - level_display
+      - liable_contract
+      - reason
+      - reviewed_at
+      - reviewed_by
+      - rule_version
+      - status
+      - status_display
+      - total_points
+    PenaltyUnitStatusEnum:
+      enum:
+      - provisional
+      - locked
+      - appealed
+      type: string
+      description: |-
+        * `provisional` - 待复核
+        * `locked` - 复核锁定
+        * `appealed` - 申诉更正
+    Photo:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+        phash:
+          type: string
+          maxLength: 64
+        taken_at:
+          type: string
+          format: date-time
+        location:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - Point
+            coordinates:
+              type: array
+              description: GeoJSON 坐标，SRID 4326
+          required:
+          - type
+          - coordinates
+          readOnly: true
+        grid:
+          type: integer
+        grid_code:
+          type: string
+          readOnly: true
+        event:
+          type: integer
+        kind:
+          $ref: '#/components/schemas/KindEnum'
+        note:
+          type: string
+          maxLength: 500
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - event
+      - grid
+      - grid_code
+      - id
+      - image
+      - location
+      - phash
+      - taken_at
+    PhotoRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        phash:
+          type: string
+          minLength: 1
+          maxLength: 64
+        taken_at:
+          type: string
+          format: date-time
+        grid:
+          type: integer
+        event:
+          type: integer
+        kind:
+          $ref: '#/components/schemas/KindEnum'
+        note:
+          type: string
+          maxLength: 500
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - event
+      - grid
+      - image
+      - phash
+      - taken_at
+    PhotoUploadRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        lon:
+          type: number
+          format: double
+          maximum: 180
+          minimum: -180
+        lat:
+          type: number
+          format: double
+          maximum: 90
+          minimum: -90
+        taken_at:
+          type: string
+          format: date-time
+        category:
+          type: string
+          minLength: 1
+          default: garbage_overflow
+          maxLength: 64
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/KindEnum'
+          default: problem
+        note:
+          type: string
+          default: ''
+          maxLength: 500
+        event:
+          type: integer
+      required:
+      - image
+      - lat
+      - lon
+      - taken_at
+    RoadGrid:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 200
+        area:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - Polygon
+            coordinates:
+              type: array
+              description: GeoJSON 坐标，SRID 4326
+          required:
+          - type
+          - coordinates
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - area
+      - code
+      - created_at
+      - id
+      - name
+    RoadGridRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 64
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        area:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - Polygon
+            coordinates:
+              type: array
+              description: GeoJSON 坐标，SRID 4326
+          required:
+          - type
+          - coordinates
+      required:
+      - area
+      - code
+      - name
